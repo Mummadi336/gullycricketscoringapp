@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10130f">
+  <meta name="description" content="GullyScore — every run has a story. Score your local cricket matches, ball by ball.">
+  <title>GullyScore — Your game, your ground</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <script src="/static/js/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#landing" aria-label="GullyScore home">
+        <span class="brand-symbol" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none">
+            <path d="M20 3.5 34.3 12v16L20 36.5 5.7 28V12L20 3.5Z" fill="currentColor"/>
+            <path d="m13.5 20.1 4.1 4.2 9.2-9.1" stroke="#151811" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="brand-name">gully<span>score</span></span>
+      </a>
+
+      <p class="nav-caption">YOUR CLUB</p>
+      <nav class="primary-nav">
+        <a class="nav-link" href="#dashboard" data-nav="dashboard">
+          <span class="nav-icon" aria-hidden="true">⌂</span><span>Dashboard</span>
+        </a>
+        <a class="nav-link" href="#teams" data-nav="teams">
+          <span class="nav-icon" aria-hidden="true">♟</span><span>Teams &amp; players</span>
+        </a>
+        <a class="nav-link" href="#live-scoring" data-nav="live-scoring">
+          <span class="nav-icon nav-icon-live" aria-hidden="true"><i></i></span><span>Live scoring</span>
+          <span class="nav-count">1</span>
+        </a>
+        <a class="nav-link" href="#history" data-nav="history">
+          <span class="nav-icon" aria-hidden="true">◷</span><span>Match history</span>
+        </a>
+        <a class="nav-link" href="#statistics" data-nav="statistics">
+          <span class="nav-icon" aria-hidden="true">▥</span><span>Player stats</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-spacer"></div>
+      <a class="sidebar-create" href="#create-match">
+        <span class="plus-icon" aria-hidden="true">+</span>
+        <span>Start a new match</span>
+        <span class="shortcut">N</span>
+      </a>
+      <div class="club-switcher">
+        <span class="club-avatar">SS</span>
+        <span class="club-copy"><strong>Sunday Strikers</strong><small>My club</small></span>
+        <span class="club-chevron" aria-hidden="true">⌄</span>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="breadcrumb"><span>Sunday Strikers</span><span class="breadcrumb-slash">/</span><strong id="page-label">Dashboard</strong></div>
+        <div class="topbar-actions">
+          <span class="season-pill"><span></span> SEASON 2025</span>
+          <button class="icon-button notification-button" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <i></i>
+          </button>
+          <button class="profile-button" type="button" aria-label="Profile: Arjun Mehta">
+            <span class="profile-avatar">AM</span><span class="profile-name">Arjun Mehta</span><span class="profile-chevron">⌄</span>
+          </button>
+        </div>
+      </header>
+
+      <div id="view-root" class="view-root" tabindex="-1"></div>
+      <footer class="app-footer"><span>Made for the game between the boundaries.</span><span>GULLYSCORE <b>·</b> 0.1</span></footer>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <a href="#dashboard" data-nav="dashboard"><span aria-hidden="true">⌂</span><small>Home</small></a>
+    <a href="#teams" data-nav="teams"><span aria-hidden="true">♟</span><small>Teams</small></a>
+    <a href="#live-scoring" data-nav="live-scoring"><span class="mobile-live-dot" aria-hidden="true"></span><small>Live</small></a>
+    <a class="mobile-create" href="#create-match" aria-label="Create match"><span aria-hidden="true">+</span></a>
+    <a href="#history" data-nav="history"><span aria-hidden="true">◷</span><small>Matches</small></a>
+    <a href="#statistics" data-nav="statistics"><span aria-hidden="true">▥</span><small>Stats</small></a>
+  </nav>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
