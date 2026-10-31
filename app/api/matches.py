@@ -9,11 +9,10 @@ from app.database import get_db
 from app.models import Innings, InningsStatus, Match, MatchPlayer, MatchStatus, Team, TossDecision
 from app.schemas.match import InningsRead, MatchCreate, MatchRead, MatchTeamRead
 from app.schemas.statistics import MatchHistoryRead
-from app.security import require_api_auth
 from app.services.statistics import get_match_history
 
 
-router = APIRouter(tags=["matches"], dependencies=[Depends(require_api_auth)])
+router = APIRouter(tags=["matches"])
 
 
 @router.get(

@@ -1,7 +1,4 @@
-import base64
-import os
 import unittest
-from unittest.mock import patch
 from uuid import uuid4
 
 from fastapi import FastAPI
@@ -30,24 +27,8 @@ from app.models import (
     WicketType,
 )
 
-_TEST_USERNAME = "test-user"
-_TEST_PASSWORD = "test-password-1234"
-_TEST_AUTH_HEADER = "Basic " + base64.b64encode(
-    f"{_TEST_USERNAME}:{_TEST_PASSWORD}".encode("utf-8")
-).decode("ascii")
-
-
 class ScoringEngineTests(unittest.TestCase):
     def setUp(self) -> None:
-        auth_environment = patch.dict(
-            os.environ,
-            {
-                "GULLYSCORE_USERNAME": _TEST_USERNAME,
-                "GULLYSCORE_PASSWORD": _TEST_PASSWORD,
-            },
-        )
-        auth_environment.start()
-        self.addCleanup(auth_environment.stop)
         self.engine = create_engine(
             "sqlite://",
             connect_args={"check_same_thread": False},
@@ -127,10 +108,7 @@ class ScoringEngineTests(unittest.TestCase):
         self.app.include_router(matches_router, prefix="/api")
         self.app.include_router(statistics_router, prefix="/api")
         self.app.dependency_overrides[get_db] = override_get_db
-        self.client = TestClient(
-            self.app,
-            headers={"Authorization": _TEST_AUTH_HEADER},
-        )
+        self.client = TestClient(self.app)
         self.striker = self.players[0][0]
         self.non_striker = self.players[0][1]
         self.bowler = self.players[1][0]

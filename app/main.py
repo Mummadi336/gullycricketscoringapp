@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import AsyncIterator
 
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -11,7 +11,6 @@ from app.api.scoring import router as scoring_router
 from app.api.statistics import router as statistics_router
 from app.api.teams import router as teams_router
 from app.database import engine, initialize_database
-from app.security import require_api_auth, validate_auth_configuration
 
 
 APP_DIRECTORY = Path(__file__).resolve().parent
@@ -20,7 +19,6 @@ STATIC_DIRECTORY = APP_DIRECTORY / "static"
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
-    validate_auth_configuration()
     initialize_database()
 
     yield
@@ -46,7 +44,7 @@ app.include_router(scoring_router, prefix="/api")
 app.include_router(statistics_router, prefix="/api")
 
 
-@app.get("/", include_in_schema=False, dependencies=[Depends(require_api_auth)])
+@app.get("/", include_in_schema=False)
 def home() -> FileResponse:
     return FileResponse(STATIC_DIRECTORY / "index.html")
 

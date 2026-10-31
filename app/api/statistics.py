@@ -3,11 +3,10 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.schemas.statistics import PlayerProfileRead, PlayerStatisticsRead
-from app.security import require_api_auth
 from app.services.statistics import get_player_profile, get_player_statistics
 
 
-router = APIRouter(tags=["statistics"], dependencies=[Depends(require_api_auth)])
+router = APIRouter(tags=["statistics"])
 
 
 @router.get(

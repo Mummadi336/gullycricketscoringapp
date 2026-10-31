@@ -11,9 +11,6 @@ py -3 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-$credential = Get-Credential -Message "Set the GullyScore API username and password (16+ characters)"
-$env:GULLYSCORE_USERNAME = $credential.UserName
-$env:GULLYSCORE_PASSWORD = $credential.GetNetworkCredential().Password
 python -m uvicorn app.main:app --reload
 ```
 
@@ -28,7 +25,7 @@ Open <http://127.0.0.1:8000> for the dashboard. The frontend is built with plain
 
 ## Local deployment guide
 
-GullyScore is currently suitable for a single-user local deployment only. API routes and the application page use one shared HTTP Basic username/password configured through environment variables. There are no individual accounts or role-based permissions. Keep Uvicorn bound to loopback (`127.0.0.1`); do not expose this service to a LAN, reverse proxy, or the public internet. Network deployment additionally requires HTTPS, stronger identity/authorization controls, and an operational database migration and backup strategy.
+GullyScore currently has no authentication. Anyone able to reach the server can view and modify its teams, matches, scores, and player data. Run it only on a trusted machine and bind Uvicorn to loopback (`127.0.0.1`); do not expose it to a LAN, reverse proxy, or the public internet. Network deployment requires authentication, authorization, HTTPS, and an operational database migration and backup strategy.
 
 From PowerShell in the project directory:
 
@@ -37,18 +34,11 @@ py -3 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-$credential = Get-Credential -Message "Set the GullyScore API username and password (16+ characters)"
-$env:GULLYSCORE_USERNAME = $credential.UserName
-$env:GULLYSCORE_PASSWORD = $credential.GetNetworkCredential().Password
 python -m app.init_db
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-The app refuses to start if either credential is missing or the password is shorter than 16 characters. The browser requests credentials when opening the app; Swagger UI can also use its **Authorize** control. Do not use `--reload` outside development. Keep the app to one Uvicorn process; SQLite and the startup schema updater are not configured for multi-worker deployment. Browse to <http://127.0.0.1:8000>. Stop the server with `Ctrl+C`, then clear the process environment:
-
-```powershell
-Remove-Item Env:GULLYSCORE_USERNAME, Env:GULLYSCORE_PASSWORD
-```
+Do not use `--reload` outside development. Keep the app to one Uvicorn process; SQLite and the startup schema updater are not configured for multi-worker deployment. Browse to <http://127.0.0.1:8000>. Stop the server with `Ctrl+C`.
 
 The database is `gullyscore.db` in the project root and contains match and player data. Before upgrading or migrating an existing database, stop the server and make a backup outside the project folder:
 
@@ -79,7 +69,7 @@ To try match setup and live scoring, create two teams with at least 11 rostered 
 
 For responsive checks, use the browser's device toolbar in VS Code or Chrome and test both a desktop viewport and a narrow mobile viewport (for example, 390 px wide). The navigation changes to a bottom bar on mobile.
 
-The unauthenticated liveness check remains available at <http://127.0.0.1:8000/api/health>, and the interactive API docs are at <http://127.0.0.1:8000/docs>; protected API operations require Basic credentials. The SQLite database file, `gullyscore.db`, is created in the project root when the app first starts.
+The liveness check is available at <http://127.0.0.1:8000/api/health>, and interactive API docs are at <http://127.0.0.1:8000/docs>. All endpoints are unauthenticated. The SQLite database file, `gullyscore.db`, is created in the project root when the app first starts.
 
 ## Team and player management API
 

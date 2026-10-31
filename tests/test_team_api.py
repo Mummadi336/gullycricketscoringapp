@@ -1,7 +1,4 @@
-import base64
-import os
 import unittest
-from unittest.mock import patch
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -13,24 +10,8 @@ from app.api.teams import router
 from app.database import Base, get_db
 from app.models import Match, MatchStatus, Player, Team, TeamPlayer
 
-_TEST_USERNAME = "test-user"
-_TEST_PASSWORD = "test-password-1234"
-_TEST_AUTH_HEADER = "Basic " + base64.b64encode(
-    f"{_TEST_USERNAME}:{_TEST_PASSWORD}".encode("utf-8")
-).decode("ascii")
-
-
 class TeamApiTests(unittest.TestCase):
     def setUp(self) -> None:
-        auth_environment = patch.dict(
-            os.environ,
-            {
-                "GULLYSCORE_USERNAME": _TEST_USERNAME,
-                "GULLYSCORE_PASSWORD": _TEST_PASSWORD,
-            },
-        )
-        auth_environment.start()
-        self.addCleanup(auth_environment.stop)
         self.engine = create_engine(
             "sqlite://",
             connect_args={"check_same_thread": False},
@@ -53,10 +34,7 @@ class TeamApiTests(unittest.TestCase):
         self.app = FastAPI()
         self.app.include_router(router, prefix="/api")
         self.app.dependency_overrides[get_db] = override_get_db
-        self.client = TestClient(
-            self.app,
-            headers={"Authorization": _TEST_AUTH_HEADER},
-        )
+        self.client = TestClient(self.app)
 
     def tearDown(self) -> None:
         self.client.close()

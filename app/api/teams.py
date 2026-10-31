@@ -15,10 +15,9 @@ from app.schemas.team import (
     TeamRosterRead,
     TeamUpdate,
 )
-from app.security import require_api_auth
 
 
-router = APIRouter(tags=["teams and players"], dependencies=[Depends(require_api_auth)])
+router = APIRouter(tags=["teams and players"])
 
 
 def get_team_or_404(session: Session, team_id: int) -> Team:

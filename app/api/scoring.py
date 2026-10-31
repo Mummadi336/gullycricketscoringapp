@@ -11,7 +11,6 @@ from app.schemas.scoring import (
     UndoRequest,
     UndoResult,
 )
-from app.security import require_api_auth
 from app.services.scoring import (
     get_match_scorecard,
     record_delivery,
@@ -21,10 +20,7 @@ from app.services.scoring import (
 )
 
 
-router = APIRouter(
-    tags=["cricket scoring"],
-    dependencies=[Depends(require_api_auth)],
-)
+router = APIRouter(tags=["cricket scoring"])
 
 
 @router.get(
